@@ -9,26 +9,22 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, pipelin
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# Загрузка переменных окружения
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 if not TOKEN:
     raise ValueError("Не задан TOKEN")
 
-# Telegram-бот
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# Загрузка медицинской NER модели
 MODEL_NAME = "d4data/biomedical-ner-all"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForTokenClassification.from_pretrained(MODEL_NAME)
 nlp = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
 
-# Подключение к локальной LLM через Ollama (например, Mistral)
 client = OpenAI(
-    base_url="http://localhost:11434/v1",  # адрес Ollama
-    api_key="ollama"  # фиктивный ключ
+    base_url="http://localhost:11434/v1",
+    api_key="ollama"
 )
 
 # Системный промпт
@@ -73,7 +69,6 @@ async def start(message: types.Message):
     )
 
 
-# Отправка запроса к локальной модели
 def ask_llm(prompt: str) -> str:
     completion = client.chat.completions.create(
         model="mistral",
@@ -99,7 +94,6 @@ async def analyze_symptoms(message: types.Message):
             )
             return
 
-        # Формируем строку из распознанных сущностей
         terms_text = "\n".join(
             f"- {ent['word']}" for ent in filtered
         )

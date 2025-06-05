@@ -54,3 +54,4 @@ typing-inspection==0.4.1
 typing_extensions==4.14.0
 urllib3==1.26.16
 yarl==1.20.0
+gunicorn==20.1.0

@@ -7,6 +7,7 @@
     <list default="true" id="7ed11260-9c8a-446b-8d2f-bf4bcb1c6665" name="Changes" comment="Первый коммит">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +83,8 @@
       <workItem from="1749120422547" duration="690000" />
       <workItem from="1749121121488" duration="100000" />
       <workItem from="1749121227389" duration="10499000" />
-      <workItem from="1749139889968" duration="598000" />
+      <workItem from="1749139889968" duration="820000" />
+      <workItem from="1749160051892" duration="1620000" />
     </task>
     <task id="LOCAL-00001" summary="Первый коммит">
       <option name="closed" value="true" />
@@ -108,7 +110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749131921054</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Первый коммит">
+      <option name="closed" value="true" />
+      <created>1749140866021</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1749140866022</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
