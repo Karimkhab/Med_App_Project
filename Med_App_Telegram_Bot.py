@@ -87,6 +87,7 @@ def ask_llm(prompt: str) -> str:
     )
     return completion.choices[0].message.content
 
+
 @dp.message()
 async def analyze_symptoms(message: types.Message):
     try:
