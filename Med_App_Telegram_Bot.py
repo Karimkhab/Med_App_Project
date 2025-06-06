@@ -6,28 +6,31 @@ from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
-from openai import OpenAI
+from openai import OpenAI  # ✅ Groq тоже использует OpenAI-клиент
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
-if not TOKEN:
-    raise ValueError("Не задан TOKEN")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # ✅ Новый ключ
+
+if not TOKEN or not GROQ_API_KEY:
+    raise ValueError("Не заданы переменные окружения TOKEN или GROQ_API_KEY")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
+# Модель для NER
 MODEL_NAME = "d4data/biomedical-ner-all"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForTokenClassification.from_pretrained(MODEL_NAME)
 nlp = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
 
+# ✅ Groq client
 client = OpenAI(
-    base_url="http://localhost:11434/v1",
-    api_key="ollama"
+    api_key=GROQ_API_KEY,
+    base_url="https://api.groq.com/openai/v1"  # ✅ Groq endpoint
 )
 
-# Системный промпт
 SYSTEM_PROMPT = """
 Ты — профессиональный медицинский ассистент. Твоя задача:
 
@@ -71,7 +74,7 @@ async def start(message: types.Message):
 
 def ask_llm(prompt: str) -> str:
     completion = client.chat.completions.create(
-        model="mistral",
+        model="llama3-70b-8192",  # ✅ Модель от Groq
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt}
