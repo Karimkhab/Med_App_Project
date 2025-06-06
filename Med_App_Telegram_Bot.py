@@ -1,6 +1,7 @@
 import os
 import asyncio
 
+from background import keep_alive
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -25,7 +26,6 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForTokenClassification.from_pretrained(MODEL_NAME)
 nlp = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
 
-# ✅ Groq client
 client = OpenAI(
     api_key=GROQ_API_KEY,
     base_url="https://api.groq.com/openai/v1"  # ✅ Groq endpoint
@@ -54,8 +54,8 @@ SYSTEM_PROMPT = """
 
 На основе этих данных рекомендую обратиться к следующим специалистам:
     - [специалист 1]
-    - [специалист 2] (если есть)
-    - [специалист 3] (если есть)
+    - [специалист 2]
+    - [специалист 3]
 
 Рекомендации:
     1. [рекомендация 1 — краткая, понятная и медицински нейтральная]
@@ -66,10 +66,22 @@ SYSTEM_PROMPT = """
 
 @dp.message(Command("start"))
 async def start(message: types.Message):
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="English 🇺🇸", callback_data="lang_en"),
+            InlineKeyboardButton(text="Русский 🇷🇺", callback_data="lang_ru")
+        ]
+    ])
     await message.answer(
-        "👋 Привет! Я помогу определить возможные симптомы в твоем описании. "
-        "Просто расскажи, что тебя беспокоит."
+        "👋 Hello! I will help you identify possible symptoms in your description. But first, please choose the language you want to communicate in.\n👋 Привет! Я помогу определить возможные симптомы в твоём описании. Но сначала выбери, пожалуйста, язык, на котором ты хочешь общаться."
     )
+
+# @dp.message(Command("start"))
+# async def start(message: types.Message):
+#     await message.answer(
+#         "👋 Привет! Я помогу определить возможные симптомы в твоем описании. "
+#         "Просто расскажи, что тебя беспокоит."
+#     )
 
 
 def ask_llm(prompt: str) -> str:
@@ -118,6 +130,6 @@ async def analyze_symptoms(message: types.Message):
         await message.answer("🚫 Произошла ошибка при анализе. Попробуйте позже.")
         print("Ошибка:", e)
 
-
+keep_alive()
 if __name__ == "__main__":
     asyncio.run(dp.start_polling(bot))
