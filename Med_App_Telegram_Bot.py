@@ -10,6 +10,8 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, pipelin
 from openai import OpenAI  # ✅ Groq тоже использует OpenAI-клиент
 from dotenv import load_dotenv
 
+from aiogram import F
+
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # ✅ Новый ключ
@@ -31,7 +33,43 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"  # ✅ Groq endpoint
 )
 
-SYSTEM_PROMPT = """
+user_languages = {}
+
+def prompt_chooser(lan: str) -> str:
+    if lan == "en":
+        SYSTEM_PROMPT = """
+You are a professional medical assistant. Your task:
+
+1. Analyze the symptoms found in the text.
+2. Provide a detailed yet concise and serious response without jokes or fabrications.
+3. Indicate only real existing specialists, from 1 to 3, relevant to the symptoms.
+4. Never use inappropriate, offensive, or joking words.
+5. Do not make a diagnosis.
+6. If no symptoms are detected, do not indicate specialists, but give general health maintenance recommendations.
+7. Consider that the user may describe both explicit symptoms and general complaints.
+8. Format the response neatly and clearly with headings and bullet points.
+
+---
+
+Response format if symptoms are found:
+
+Detected symptoms:
+    - [term 1] (type: [category])
+    - [term 2] (type: [category])
+    ... (if there are many symptoms — list them all)
+
+Based on this data, I recommend consulting the following specialists:
+    - [specialist 1]
+    - [specialist 2]
+    - [specialist 3]
+
+Recommendations:
+    1. [recommendation 1 — brief, clear, and medically neutral]
+    2. [recommendation 2] (if any)
+    3. [recommendation 3] (not necessarily all three, can be fewer)
+"""
+    else:
+        SYSTEM_PROMPT = """
 Ты — профессиональный медицинский ассистент. Твоя задача:
 
 1. Проанализировать симптомы, найденные в тексте.
@@ -62,6 +100,21 @@ SYSTEM_PROMPT = """
     2. [рекомендация 2] (если есть)
     3. [рекомендация 3] (не обязательно все три, можно меньше)
 """
+    return SYSTEM_PROMPT
+
+
+
+@dp.callback_query(F.data.startswith("lang_"))
+async def language_chosen(callback: types.CallbackQuery):
+    lang = callback.data.split("_")[1]  # 'en' или 'ru'
+    user_languages[callback.from_user.id] = lang
+
+    greetings = {
+        'en': "Great! Now you can send me your symptoms description in English.",
+        'ru': "Отлично! Теперь ты можешь описывать симптомы на русском."
+    }
+    await callback.message.answer(greetings[lang])
+    await callback.answer()  # Убирает "часики" у кнопки
 
 
 @dp.message(Command("start"))
@@ -73,7 +126,7 @@ async def start(message: types.Message):
         ]
     ])
     await message.answer(
-        "👋 Hello! I will help you identify possible symptoms in your description. But first, please choose the language you want to communicate in.\n👋 Привет! Я помогу определить возможные симптомы в твоём описании. Но сначала выбери, пожалуйста, язык, на котором ты хочешь общаться."
+        "👋 Hello! I will help you identify possible symptoms in your description. But first, please choose the language you want to communicate in.\n\n👋 Привет! Я помогу определить возможные симптомы в твоём описании. Но сначала выбери, пожалуйста, язык, на котором ты хочешь общаться.",reply_markup=keyboard
     )
 
 # @dp.message(Command("start"))
@@ -84,7 +137,8 @@ async def start(message: types.Message):
 #     )
 
 
-def ask_llm(prompt: str) -> str:
+def ask_llm(prompt: str, lang) -> str:
+    SYSTEM_PROMPT = prompt_chooser(lang)
     completion = client.chat.completions.create(
         model="llama3-70b-8192",  # ✅ Модель от Groq
         messages=[
@@ -98,36 +152,41 @@ def ask_llm(prompt: str) -> str:
 
 @dp.message()
 async def analyze_symptoms(message: types.Message):
+    lang = user_languages.get(message.from_user.id, 'ru')
+
+    if lang == 'en':
+        no_terms_text = "❗️ No medical terms were detected. Please describe your symptoms in more detail."
+        error_text = "🚫 An error occurred during analysis. Please try again later."
+        advice_text = "\n\nOur bot 🤖 provides advice 📝 but does not replace a doctor 🩺. In case of doubts or worsening, consult a specialist."
+    else:
+        no_terms_text = "❗️ Не удалось выявить медицинские термины. Попробуйте описать симптомы подробнее."
+        error_text = "🚫 Произошла ошибка при анализе. Попробуйте позже."
+        advice_text = "\n\nНаш бот 🤖 даёт советы 📝, но не заменяет врача 🩺. При любых сомнениях или ухудшениях состояния обязательно проконсультируйся со специалистом."
+
     try:
         text = message.text
         entities = nlp(text)
         filtered = [ent for ent in entities if ent["entity_group"] != "O"]
 
         if not filtered:
-            await message.answer(
-                "❗️ Не удалось выявить медицинские термины. Попробуйте описать симптомы подробнее."
-            )
+            await message.answer(no_terms_text)
             return
 
-        terms_text = "\n".join(
-            f"- {ent['word']}" for ent in filtered
-        )
-
+        terms_text = "\n".join(f"- {ent['word']}" for ent in filtered)
         prompt = f"Пациент описал: {text}\n\nРаспознанные термины:\n{terms_text}"
-        response = ask_llm(prompt)
+
+        response = ask_llm(prompt, lang)
 
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="🔗 Официальный медицинский ресурс", url="https://vk.com/video807566_169118280")]
+            [InlineKeyboardButton(
+                text="🔗 Official medical resource" if lang == 'en' else "🔗 Официальный медицинский ресурс",
+                url="https://vk.com/video807566_169118280")]
         ])
 
-        await message.answer(response +
-            "\n\nНаш бот 🤖 даёт советы 📝, но не заменяет врача 🩺. При любых сомнениях или ухудшениях состояния обязательно проконсультируйся со специалистом.",
-            parse_mode="Markdown",
-            reply_markup=keyboard
-        )
+        await message.answer(response + advice_text, parse_mode="Markdown", reply_markup=keyboard)
 
     except Exception as e:
-        await message.answer("🚫 Произошла ошибка при анализе. Попробуйте позже.")
+        await message.answer(error_text)
         print("Ошибка:", e)
 
 keep_alive()
