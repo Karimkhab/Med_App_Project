@@ -2,19 +2,22 @@ import os
 import asyncio
 
 from background import keep_alive
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
-from openai import OpenAI  # ✅ Groq тоже использует OpenAI-клиент
+from openai import OpenAI
 from dotenv import load_dotenv
-
-from aiogram import F
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # ✅ Новый ключ
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 if not TOKEN or not GROQ_API_KEY:
     raise ValueError("Не заданы переменные окружения TOKEN или GROQ_API_KEY")
@@ -22,7 +25,6 @@ if not TOKEN or not GROQ_API_KEY:
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# Модель для NER
 MODEL_NAME = "d4data/biomedical-ner-all"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForTokenClassification.from_pretrained(MODEL_NAME)
@@ -30,117 +32,196 @@ nlp = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="si
 
 client = OpenAI(
     api_key=GROQ_API_KEY,
-    base_url="https://api.groq.com/openai/v1"  # ✅ Groq endpoint
+    base_url="https://api.groq.com/openai/v1"
 )
 
-user_languages = {}
+web_app_url = "https://example.com"  # ссылка на твоё веб-приложение
+
+main_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Open Web", web_app=WebAppInfo(url=web_app_url))
+        ]
+    ],
+    resize_keyboard=True
+)
 
 def prompt_chooser(lan: str) -> str:
     if lan == "en":
-        SYSTEM_PROMPT = """
+        return """
 You are a professional medical assistant. Your task:
 
-1. Analyze the symptoms found in the text.
-2. Provide a detailed yet concise and serious response without jokes or fabrications.
-3. Indicate only real existing specialists, from 1 to 3, relevant to the symptoms.
-4. Never use inappropriate, offensive, or joking words.
-5. Do not make a diagnosis.
-6. If no symptoms are detected, do not indicate specialists, but give general health maintenance recommendations.
-7. Consider that the user may describe both explicit symptoms and general complaints.
-8. Format the response neatly and clearly with headings and bullet points.
+1) Analyze the symptoms found in the text.
+2) Provide a detailed yet concise and serious response without jokes or fabrications.
+3) Indicate only real existing specialists, from 1 to 3, relevant to the symptoms.
+4) Never use inappropriate, offensive, or joking words.
+5) Do not make a diagnosis.
+6) If no symptoms are detected, do not indicate specialists, but give general health maintenance recommendations.
+7) Consider that the user may describe both explicit symptoms and general complaints.
+8) Format the response neatly and clearly with headings, numbered bullet points, and indentation.
 
 ---
 
 Response format if symptoms are found:
 
-Detected symptoms:
-    - [term 1] (type: [category])
-    - [term 2] (type: [category])
-    ... (if there are many symptoms — list them all)
+*Detected symptoms:*
+    1) [term 1] (type: [category])  
+    2) [term 2] (type: [category])  
+    ... (list all if there are many)
 
-Based on this data, I recommend consulting the following specialists:
-    - [specialist 1]
-    - [specialist 2]
-    - [specialist 3]
+*Based on this data, I recommend consulting the following specialists:*
+    1) [specialist 1]  
+    2) [specialist 2]  
+    3) [specialist 3]
 
-Recommendations:
-    1. [recommendation 1 — brief, clear, and medically neutral]
-    2. [recommendation 2] (if any)
-    3. [recommendation 3] (not necessarily all three, can be fewer)
+*Recommendations:*
+    1) [recommendation 1 — brief, clear, and medically neutral]  
+    2) [recommendation 2]  
+    3) [recommendation 3]
 """
     else:
-        SYSTEM_PROMPT = """
+        return """
 Ты — профессиональный медицинский ассистент. Твоя задача:
 
-1. Проанализировать симптомы, найденные в тексте.
-2. Выдать подробный, но лаконичный и серьёзный ответ без шуток и выдумок.
-3. Указывать только реально существующих специалистов, от 1 до 3, соответствующих симптомам.
-4. Никогда не использовать неуместные, оскорбительные или шуточные слова.
-5. Не ставить диагноз.
-6. Если симптомы не обнаружены, не указывай специалистов, а дай общие рекомендации для сохранения здоровья.
-7. Учитывай, что пользователь может описать как явные симптомы, так и общие жалобы.
-8. Форматируй ответ аккуратно и читабельно с подзаголовками и пунктами.
+1) Проанализировать симптомы, найденные в тексте.  
+2) Выдать подробный, но лаконичный и серьёзный ответ без шуток и выдумок.  
+3) Указывать только реально существующих специалистов (1–3), соответствующих симптомам.  
+4) Никогда не использовать неуместные, оскорбительные или шуточные слова.  
+5) Не ставить диагноз.  
+6) Если симптомы не обнаружены — не указывай специалистов, а дай общие рекомендации по здоровью.  
+7) Учитывай, что пользователь может описывать как симптомы, так и общие жалобы.  
+8) Оформи ответ красиво и понятно — с подзаголовками, нумерацией и отступами.
 
 ---
 
-Формат ответа Если найдены симптомы:
+Формат ответа, если симптомы найдены:
 
-Найденные симптомы:
-    - [термин 1] (тип: [категория])
-    - [термин 2] (тип: [категория])
+*Найденные симптомы:*  
+    1) [термин 1] (тип: [категория])  
+    2) [термин 2] (тип: [категория])  
     ... (если симптомов много — перечисли все)
 
-На основе этих данных рекомендую обратиться к следующим специалистам:
-    - [специалист 1]
-    - [специалист 2]
-    - [специалист 3]
+*На основе этих данных рекомендую обратиться к специалистам:*  
+    1) [специалист 1]  
+    2) [специалист 2]  
+    3) [специалист 3]
 
-Рекомендации:
-    1. [рекомендация 1 — краткая, понятная и медицински нейтральная]
-    2. [рекомендация 2] (если есть)
-    3. [рекомендация 3] (не обязательно все три, можно меньше)
+*Рекомендации:*  
+    1) [рекомендация 1 — краткая, понятная и нейтральная]  
+    2) [рекомендация 2]  
+    3) [рекомендация 3]
 """
     return SYSTEM_PROMPT
 
 
+language_message_ids = {}
+user_languages = {}
 
-@dp.callback_query(F.data.startswith("lang_"))
-async def language_chosen(callback: types.CallbackQuery):
-    lang = callback.data.split("_")[1]  # 'en' или 'ru'
-    user_languages[callback.from_user.id] = lang
-
-    greetings = {
-        'en': "Great! Now you can send me your symptoms description in English.",
-        'ru': "Отлично! Теперь ты можешь описывать симптомы на русском."
-    }
-    await callback.message.answer(greetings[lang])
-    await callback.answer()  # Убирает "часики" у кнопки
-
+class Form(StatesGroup):
+    waiting_for_symptoms = State()
 
 @dp.message(Command("start"))
 async def start(message: types.Message):
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="English 🇺🇸", callback_data="lang_en"),
-            InlineKeyboardButton(text="Русский 🇷🇺", callback_data="lang_ru")
+            InlineKeyboardButton(text="English \U0001F1FA\U0001F1F8", callback_data="lang_en"),
+            InlineKeyboardButton(text="Русский \U0001F1F7\U0001F1FA", callback_data="lang_ru")
         ]
     ])
-    await message.answer(
-        "👋 Hello! I will help you identify possible symptoms in your description. But first, please choose the language you want to communicate in.\n\n👋 Привет! Я помогу определить возможные симптомы в твоём описании. Но сначала выбери, пожалуйста, язык, на котором ты хочешь общаться.",reply_markup=keyboard
+    sent_message = await message.answer(
+        "👋 Please choose your language | Пожалуйста, выбери язык.",
+        reply_markup=keyboard
     )
+    language_message_ids[message.from_user.id] = sent_message.message_id
 
-# @dp.message(Command("start"))
-# async def start(message: types.Message):
-#     await message.answer(
-#         "👋 Привет! Я помогу определить возможные симптомы в твоем описании. "
-#         "Просто расскажи, что тебя беспокоит."
-#     )
+@dp.callback_query(F.data.startswith("lang_"))
+async def language_chosen(callback: types.CallbackQuery):
+    user_id = callback.from_user.id
+    language = callback.data.split("_")[1]
+    user_languages[user_id] = language
 
+    if user_id in language_message_ids:
+        try:
+            await bot.delete_message(chat_id=user_id, message_id=language_message_ids[user_id])
+        except Exception as e:
+            print(f"Failed to delete message: {e}")
 
-def ask_llm(prompt: str, lang) -> str:
-    SYSTEM_PROMPT = prompt_chooser(lang)
+    await show_menu(callback)
+
+async def show_menu(callback: types.CallbackQuery):
+    user_id = callback.from_user.id
+    user_language = user_languages.get(user_id, "en")
+
+    builder = InlineKeyboardBuilder()
+    if user_language == 'en':
+        builder.row(
+            types.InlineKeyboardButton(text="\U0001F4F1 Open Web App", web_app=types.WebAppInfo(url="https://your-web-app-url.com"))
+        )
+        builder.row(
+            types.InlineKeyboardButton(text="\U0001F4AC Describe Symptoms", callback_data="describe_symptoms"),
+            types.InlineKeyboardButton(text="\U0001F310 Change Language", callback_data="change_language")
+        )
+        text = """
+\U0001F3E5 *Welcome to Med App!*
+
+Here’s how I can help:
+1. **Describe your symptoms** → Get AI-powered recommendations
+2. **Book doctors** → Instant appointments via our Web App
+3. **Change language**
+
+Choose an option below or type your symptoms directly.
+        """
+    else:
+        builder.row(
+            types.InlineKeyboardButton(text="\U0001F4F1 Открыть Web App", web_app=types.WebAppInfo(url="https://your-web-app-url.com")),
+        )
+        builder.row(
+            types.InlineKeyboardButton(text="\U0001F4AC Описать симптомы", callback_data="describe_symptoms"),
+            types.InlineKeyboardButton(text="\U0001F310 Сменить язык", callback_data="change_language")
+        )
+        text = """
+\U0001F3E5 *Добро пожаловать в Med App!*
+
+Как я могу помочь:
+1. **Опишите симптомы** → Получите рекомендации от ИИ
+2. **Записаться к врачу** → Через наше Web-приложение
+3. **Сменить язык**
+
+Выберите действие ниже или напишите симптомы.
+        """
+
+    await callback.message.answer(text, parse_mode="Markdown", reply_markup=builder.as_markup())
+    await callback.answer()
+
+@dp.callback_query(F.data == "change_language")
+async def change_language(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="English \U0001F1FA\U0001F1F8", callback_data="lang_en"),
+            InlineKeyboardButton(text="Русский \U0001F1F7\U0001F1FA", callback_data="lang_ru")
+        ]
+    ])
+    sent_message = await callback.message.answer(
+        "👋 Please choose your language | Пожалуйста, выбери язык.",
+        reply_markup=keyboard
+    )
+    language_message_ids[callback.from_user.id] = sent_message.message_id
+    await callback.answer()
+
+@dp.callback_query(F.data == "describe_symptoms")
+async def ask_for_symptoms(callback: types.CallbackQuery, state: FSMContext):
+    user_id = callback.from_user.id
+    language = user_languages.get(user_id, "en")
+    text = "\U0001F4DD Please describe your symptoms in detail." if language == 'en' else "\U0001F4DD Пожалуйста, опиши свои симптомы подробно."
+
+    await state.set_state(Form.waiting_for_symptoms)
+    await callback.message.answer(text)
+    await callback.answer()
+
+def ask_llm(prompt: str, user_language: str) -> str:
+    SYSTEM_PROMPT = prompt_chooser(user_language)
     completion = client.chat.completions.create(
-        model="llama3-70b-8192",  # ✅ Модель от Groq
+        model="llama3-70b-8192",
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt}
@@ -149,19 +230,16 @@ def ask_llm(prompt: str, lang) -> str:
     )
     return completion.choices[0].message.content
 
+@dp.message(Form.waiting_for_symptoms)
+async def analyze_symptoms(message: types.Message, state: FSMContext):
+    await state.clear()  # Сброс состояния после получения текста
 
-@dp.message()
-async def analyze_symptoms(message: types.Message):
-    lang = user_languages.get(message.from_user.id, 'ru')
+    user_id = message.from_user.id
+    user_language = user_languages.get(user_id, "en")
 
-    if lang == 'en':
-        no_terms_text = "❗️ No medical terms were detected. Please describe your symptoms in more detail."
-        error_text = "🚫 An error occurred during analysis. Please try again later."
-        advice_text = "\n\nOur bot 🤖 provides advice 📝 but does not replace a doctor 🩺. In case of doubts or worsening, consult a specialist."
-    else:
-        no_terms_text = "❗️ Не удалось выявить медицинские термины. Попробуйте описать симптомы подробнее."
-        error_text = "🚫 Произошла ошибка при анализе. Попробуйте позже."
-        advice_text = "\n\nНаш бот 🤖 даёт советы 📝, но не заменяет врача 🩺. При любых сомнениях или ухудшениях состояния обязательно проконсультируйся со специалистом."
+    no_terms_text = "❗️ No medical terms detected." if user_language == 'en' else "❗️ Не удалось выявить медицинские термины."
+    error_text = "🚫 Error analyzing symptoms." if user_language == 'en' else "🚫 Произошла ошибка при анализе."
+    advice_text = "\n\n🤖 This bot gives advice but does not replace a doctor." if user_language == 'en' else "\n\n🤖 Бот даёт советы, но не заменяет врача."
 
     try:
         text = message.text
@@ -172,15 +250,12 @@ async def analyze_symptoms(message: types.Message):
             await message.answer(no_terms_text)
             return
 
-        terms_text = "\n".join(f"- {ent['word']}" for ent in filtered)
-        prompt = f"Пациент описал: {text}\n\nРаспознанные термины:\n{terms_text}"
-
-        response = ask_llm(prompt, lang)
+        terms_text = "\n".join(f"- {ent['word']} (type: {ent['entity_group']})" for ent in filtered)
+        prompt = f"{'The patient described' if user_language == 'en' else 'Пациент описал'}: {text}\n\n{'Recognized terms' if user_language == 'en' else 'Распознанные термины'}:\n{terms_text}"
+        response = ask_llm(prompt, user_language)
 
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(
-                text="🔗 Official medical resource" if lang == 'en' else "🔗 Официальный медицинский ресурс",
-                url="https://vk.com/video807566_169118280")]
+            [InlineKeyboardButton(text="\U0001F519 Back to Menu" if user_language == 'en' else "\U0001F519 Вернуться в меню", callback_data="lang_" + user_language)]
         ])
 
         await message.answer(response + advice_text, parse_mode="Markdown", reply_markup=keyboard)
