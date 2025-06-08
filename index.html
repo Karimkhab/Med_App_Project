@@ -10,7 +10,7 @@
             font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #ffffff;
+            background-color: #f8f9fa;
             color: #333;
             line-height: 1.6;
         }
@@ -24,66 +24,88 @@
             margin-bottom: 30px;
             padding: 20px 0;
         }
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #1a365d;
+        }
         .header h1 {
-            color: #2a5885;
-            font-size: 40px;
-            margin-bottom: 20px;
+            color: #1a365d;
+            font-size: 48px;
+            margin-bottom: 15px;
+            font-weight: 700;
         }
         .header p {
-            color: #666;
-            font-size: 16px;
+            color: #4a5568;
+            font-size: 18px;
         }
         .card {
             background: white;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e7e8ec;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: none;
         }
         .btn {
             display: block;
             width: 100%;
-            padding: 14px;
-            background-color: #5181b8;
+            padding: 16px;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            margin-top: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-            transition: background-color 0.2s;
-        }
-        .btn:hover {
-            background-color: #5a88bd;
+            transition: all 0.3s ease;
         }
         .btn-primary {
-            background-color: #5181b8;
+            background-color: #2c5282;
+        }
+        .btn-primary:hover {
+            background-color: #1a365d;
+            transform: translateY(-2px);
         }
         .btn-secondary {
-            background-color: #e5ebf1;
-            color: #55677d;
+            background-color: #e2e8f0;
+            color: #2d3748;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
         }
         .divider {
             height: 1px;
-            background-color: #e7e8ec;
-            margin: 20px 0;
+            background-color: #e2e8f0;
+            margin: 25px 0;
         }
         .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2a5885;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2c5282;
+        }
+        .telegram-text {
+            color: #4a5568;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        strong {
+            color: #2c5282;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Med App</h1>
+            <!-- Добавлено изображение логотипа -->
+            <img src="/Project_Picture.png" alt="Med App Logo" class="logo">
+            <h1>MED APP</h1>
             <p>Your well-being is our priority</p>
         </div>
 
@@ -97,7 +119,7 @@
 
         <div class="card">
             <h3 class="section-title">Get Tested</h3>
-            <p>Book doctors and diagnostics instantly via <strong>Telegram</strong></p>
+            <p class="telegram-text">Book doctors and diagnostics instantly via <strong>Telegram</strong></p>
             <button class="btn btn-secondary" onclick="openTelegram()">
                 Open in Telegram
             </button>
@@ -122,8 +144,8 @@
         Telegram.WebApp.expand();
 
         // Меняем цвет фона WebApp
-        Telegram.WebApp.setHeaderColor('#5181b8');
-        Telegram.WebApp.setBackgroundColor('#f5f7fa');
+        Telegram.WebApp.setHeaderColor('#1a365d');
+        Telegram.WebApp.setBackgroundColor('#f8f9fa');
     </script>
 </body>
 </html>
