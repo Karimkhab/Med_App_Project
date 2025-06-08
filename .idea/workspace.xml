@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ed11260-9c8a-446b-8d2f-bf4bcb1c6665" name="Changes" comment="коммит">
+    <list default="true" id="7ed11260-9c8a-446b-8d2f-bf4bcb1c6665" name="Changes" comment="New bot commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +84,7 @@
       <workItem from="1749121227389" duration="10499000" />
       <workItem from="1749139889968" duration="820000" />
       <workItem from="1749160051892" duration="3853000" />
-      <workItem from="1749203504998" duration="369000" />
+      <workItem from="1749203504998" duration="18515000" />
     </task>
     <task id="LOCAL-00001" summary="Первый коммит">
       <option name="closed" value="true" />
@@ -125,7 +126,63 @@
       <option name="project" value="LOCAL" />
       <updated>1749161751814</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="коммит">
+      <option name="closed" value="true" />
+      <created>1749204153201</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1749204153201</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Requirement txt file became more simple">
+      <option name="closed" value="true" />
+      <created>1749204226971</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1749204226971</updated>
+    </task>
+    <task id="LOCAL-00008" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749206334429</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749206334429</updated>
+    </task>
+    <task id="LOCAL-00009" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749209964063</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1749209964063</updated>
+    </task>
+    <task id="LOCAL-00010" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749211781738</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1749211781738</updated>
+    </task>
+    <task id="LOCAL-00011" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749399608368</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1749399608368</updated>
+    </task>
+    <task id="LOCAL-00012" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749401314302</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1749401314302</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,9 +191,11 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Первый коммит" />
     <MESSAGE value="коммит" />
-    <option name="LAST_COMMIT_MESSAGE" value="коммит" />
+    <MESSAGE value="Requirement txt file became more simple" />
+    <MESSAGE value="New bot commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="New bot commit" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Med_App_Project$Med_App_Telegram_Bot.coverage" NAME="Med_App_Telegram_Bot Coverage Results" MODIFIED="1749161881182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Med_App_Project$Med_App_Telegram_Bot.coverage" NAME="Med_App_Telegram_Bot Coverage Results" MODIFIED="1749401961311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

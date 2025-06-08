@@ -10,6 +10,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
+from aiogram import Bot
+from aiogram.types import WebAppInfo, MenuButtonWebApp
 
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 from openai import OpenAI
@@ -35,7 +37,7 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"
 )
 
-web_app_url = "https://cs.pikabu.ru/img_n/2012-10_3/93a.jpg"  # ссылка на твоё веб-приложение
+web_app_url = "https://med-app-project-alpha.vercel.app/"  # ссылка на твоё веб-приложение
 
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
@@ -131,6 +133,12 @@ async def start(message: types.Message):
     sent_message = await message.answer(
         "👋 Please choose your language | Пожалуйста, выбери язык.",
         reply_markup=keyboard
+    )
+    await bot.set_chat_menu_button(
+        menu_button=MenuButtonWebApp(
+            text="Open",
+            web_app=WebAppInfo(url=web_app_url)
+        )
     )
     language_message_ids[message.from_user.id] = sent_message.message_id
 
