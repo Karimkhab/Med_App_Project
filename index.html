@@ -2,150 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Med App - Medical Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom Input</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #f0f4f8;
             color: #333;
-            line-height: 1.6;
         }
+
+        .navbar {
+            width: 100%;
+            background-color: #1a365d;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .menu-toggle {
+            font-size: 28px;
+            color: white;
+            cursor: pointer;
+        }
+
         .container {
-            max-width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
             padding: 20px;
-            box-sizing: border-box;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+            margin-bottom: 20px;
         }
-        .logo {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #1a365d;
-        }
+
         .header h1 {
-            color: #1a365d;
-            font-size: 48px;
-            margin-bottom: 15px;
-            font-weight: 700;
+            font-size: 24px;
+            color: #2c5282;
         }
-        .header p {
-            color: #4a5568;
-            font-size: 18px;
+
+        .form-group {
+            margin-bottom: 20px;
         }
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border: none;
-        }
-        .btn {
+
+        label {
             display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        textarea {
             width: 100%;
-            padding: 16px;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #2b6cb0;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 20px;
+            border-radius: 6px;
             cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
-        .btn-primary {
+
+        button:hover {
             background-color: #2c5282;
         }
-        .btn-primary:hover {
-            background-color: #1a365d;
-            transform: translateY(-2px);
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #2c5282;
+            padding-top: 60px;
+            transition: left 0.3s ease;
+            z-index: 1000;
         }
-        .btn-secondary {
-            background-color: #e2e8f0;
-            color: #2d3748;
-        }
-        .btn-secondary:hover {
-            background-color: #cbd5e0;
-        }
-        .divider {
-            height: 1px;
-            background-color: #e2e8f0;
-            margin: 25px 0;
-        }
-        .section-title {
+
+        .sidebar-header {
+            position: absolute;
+            top: 15px;
+            right: 15px;
             font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #2c5282;
+            color: white;
+            cursor: pointer;
         }
-        .telegram-text {
-            color: #4a5568;
-            font-size: 16px;
-            line-height: 1.5;
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        strong {
-            color: #2c5282;
+
+        .sidebar-menu li {
+            padding: 15px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <!-- Добавлено изображение логотипа -->
-            <img src="/Project_Picture.png" alt="Med App Logo" class="logo">
-            <h1>MED APP</h1>
-            <p>Your well-being is our priority</p>
-        </div>
-
-        <div class="card">
-            <button class="btn btn-primary" onclick="showDoctors('general')">
-                See a Doctor →
-            </button>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="card">
-            <h3 class="section-title">Get Tested</h3>
-            <p class="telegram-text">Book doctors and diagnostics instantly via <strong>Telegram</strong></p>
-            <button class="btn btn-secondary" onclick="openTelegram()">
-                Open in Telegram
-            </button>
+    <!-- Top Navigation Bar -->
+    <div class="navbar">
+        <div class="menu-toggle" onclick="toggleSidebar()">
+            &#9776;
         </div>
     </div>
 
+    <!-- Main Content -->
+    <div class="container">
+        <div class="header">
+            <h1>Describe Your Symptoms</h1>
+        </div>
+        <form id="symptomForm">
+            <div class="form-group">
+                <label for="symptoms">Enter your symptoms:</label>
+                <textarea id="symptoms" name="symptoms" placeholder="e.g., Headache, sore throat, fever..."></textarea>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span onclick="toggleSidebar()">✕</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#">👤 Profile</a></li>
+            <li><a href="#">⚙️ Settings</a></li>
+            <li><a href="#" onclick="Telegram.WebApp.close()">🚪 Exit</a></li>
+        </ul>
+    </div>
+
     <script>
-        function showDoctors(specialization) {
-            Telegram.WebApp.sendData(JSON.stringify({
-                action: 'show_doctors',
-                specialization: specialization
-            }));
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
         }
 
-        function openTelegram() {
-            Telegram.WebApp.close();
-            window.location.href = "https://t.me/@med_app_tg_bot";
-        }
-
-        // Инициализация WebApp
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
-
-        // Меняем цвет фона WebApp
-        Telegram.WebApp.setHeaderColor('#1a365d');
-        Telegram.WebApp.setBackgroundColor('#f8f9fa');
+        document.getElementById('symptomForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const symptoms = document.getElementById('symptoms').value;
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.sendData(symptoms);
+            } else {
+                alert("Telegram WebApp not available.");
+            }
+        });
     </script>
 </body>
 </html>
