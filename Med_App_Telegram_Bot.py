@@ -35,7 +35,7 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"
 )
 
-web_app_url = "https://example.com"  # ссылка на твоё веб-приложение
+web_app_url = "https://cs.pikabu.ru/img_n/2012-10_3/93a.jpg"  # ссылка на твоё веб-приложение
 
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
@@ -155,7 +155,7 @@ async def show_menu(callback: types.CallbackQuery):
     builder = InlineKeyboardBuilder()
     if user_language == 'en':
         builder.row(
-            types.InlineKeyboardButton(text="\U0001F4F1 Open Web App", web_app=types.WebAppInfo(url="https://your-web-app-url.com"))
+            types.InlineKeyboardButton(text="\U0001F4F1 Open Web App", web_app=types.WebAppInfo(url=web_app_url))
         )
         builder.row(
             types.InlineKeyboardButton(text="\U0001F4AC Describe Symptoms", callback_data="describe_symptoms"),
@@ -173,7 +173,7 @@ Choose an option below or type your symptoms directly.
         """
     else:
         builder.row(
-            types.InlineKeyboardButton(text="\U0001F4F1 Открыть Web App", web_app=types.WebAppInfo(url="https://your-web-app-url.com")),
+            types.InlineKeyboardButton(text="\U0001F4F1 Открыть Web App", web_app=types.WebAppInfo(url=web_app_url)),
         )
         builder.row(
             types.InlineKeyboardButton(text="\U0001F4AC Описать симптомы", callback_data="describe_symptoms"),

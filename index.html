@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HealthAssist - Медицинский помощник</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header {
+            background-color: #4285f4;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .symptoms-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 100px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HealthAssist</h1>
+            <p>Ваш медицинский помощник</p>
+        </div>
+
+        <div class="card">
+            <h3>Опишите симптомы</h3>
+            <textarea class="symptoms-input" placeholder="Например: Головная боль и температура 3 дня..."></textarea>
+            <button class="btn" onclick="analyzeSymptoms()">Анализировать</button>
+        </div>
+
+        <div class="card">
+            <h3>Запись к врачу</h3>
+            <p>Выберите специалиста для консультации:</p>
+            <button class="btn" onclick="showDoctors('therapist')">Терапевт</button>
+            <button class="btn" onclick="showDoctors('neurologist')">Невролог</button>
+            <button class="btn" onclick="showDoctors('cardiologist')">Кардиолог</button>
+        </div>
+    </div>
+
+    <script>
+        function analyzeSymptoms() {
+            const text = document.querySelector('.symptoms-input').value;
+            if(text.trim() === '') {
+                alert('Пожалуйста, опишите симптомы');
+                return;
+            }
+
+            // Здесь будет вызов Telegram Bot API для анализа симптомов
+            Telegram.WebApp.sendData(JSON.stringify({
+                action: 'analyze_symptoms',
+                text: text
+            }));
+        }
+
+        function showDoctors(specialization) {
+            // Открываем список врачей выбранной специализации
+            Telegram.WebApp.sendData(JSON.stringify({
+                action: 'show_doctors',
+                specialization: specialization
+            }));
+        }
+
+        // Инициализация WebApp
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+    </script>
+</body>
+</html>
