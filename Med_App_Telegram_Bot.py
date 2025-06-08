@@ -101,12 +101,12 @@ Response format if symptoms are found:
 *Найденные симптомы:*  
     1) [термин 1] (тип: [категория])  
     2) [термин 2] (тип: [категория])  
-    ... (если симптомов много — перечисли все)
+    ...
 
 *На основе этих данных рекомендую обратиться к специалистам:*  
     1) [специалист 1]  
     2) [специалист 2]  
-    3) [специалист 3]
+    ...
 
 *Рекомендации:*  
     1) [рекомендация 1 — краткая, понятная и нейтральная]  
@@ -262,11 +262,15 @@ async def analyze_symptoms(message: types.Message, state: FSMContext):
         prompt = f"{'The patient described' if user_language == 'en' else 'Пациент описал'}: {text}\n\n{'Recognized terms' if user_language == 'en' else 'Распознанные термины'}:\n{terms_text}"
         response = ask_llm(prompt, user_language)
 
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="\U0001F519 Back to Menu" if user_language == 'en' else "\U0001F519 Вернуться в меню", callback_data="lang_" + user_language)]
-        ])
-
-        await message.answer(response + advice_text, parse_mode="Markdown", reply_markup=keyboard)
+        # keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        #     [InlineKeyboardButton(text="\U0001F519 Back to Menu" if user_language == 'en' else "\U0001F519 Вернуться в меню", callback_data="lang_" + user_language)]
+        # ])
+        builder = InlineKeyboardBuilder()
+        builder.add(
+            types.InlineKeyboardButton(text="\U0001F4AC Describe Symptoms" if user_language == 'en' else "\U0001F4AC Описать симптомы", callback_data="describe_symptoms"),
+            types.InlineKeyboardButton(text="\U0001F519 Back to Menu" if user_language == 'en' else "\U0001F519 Вернуться в меню", callback_data="lang_" + user_language)
+        )
+        await message.answer(response + advice_text, parse_mode="Markdown", reply_markup=builder.as_markup())
 
     except Exception as e:
         await message.answer(error_text)
