@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HealthAssist - Медицинский помощник</title>
+    <title>Med App - Medical Assistant</title>
     <style>
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f7fa;
+            background-color: #ffffff;
             color: #333;
+            line-height: 1.6;
         }
         .container {
             max-width: 100%;
@@ -19,93 +20,110 @@
             box-sizing: border-box;
         }
         .header {
-            background-color: #4285f4;
-            color: white;
-            padding: 15px 20px;
             text-align: center;
-            border-radius: 0 0 10px 10px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        .header h1 {
+            color: #2a5885;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 16px;
         }
         .card {
             background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e7e8ec;
         }
         .btn {
             display: block;
             width: 100%;
-            padding: 12px;
-            background-color: #4285f4;
+            padding: 14px;
+            background-color: #5181b8;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
-            margin-top: 10px;
+            font-weight: 500;
+            margin-top: 15px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
+            transition: background-color 0.2s;
         }
-        .symptoms-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-height: 100px;
-            margin-bottom: 10px;
-            font-family: inherit;
+        .btn:hover {
+            background-color: #5a88bd;
+        }
+        .btn-primary {
+            background-color: #5181b8;
+        }
+        .btn-secondary {
+            background-color: #e5ebf1;
+            color: #55677d;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e7e8ec;
+            margin: 20px 0;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2a5885;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>HealthAssist</h1>
-            <p>Ваш медицинский помощник</p>
+            <h1>Med App</h1>
+            <p>Your well-being is our priority</p>
         </div>
 
         <div class="card">
-            <h3>Опишите симптомы</h3>
-            <textarea class="symptoms-input" placeholder="Например: Головная боль и температура 3 дня..."></textarea>
-            <button class="btn" onclick="analyzeSymptoms()">Анализировать</button>
+            <button class="btn btn-primary" onclick="showDoctors('general')">
+                See a Doctor →
+            </button>
         </div>
 
+        <div class="divider"></div>
+
         <div class="card">
-            <h3>Запись к врачу</h3>
-            <p>Выберите специалиста для консультации:</p>
-            <button class="btn" onclick="showDoctors('therapist')">Терапевт</button>
-            <button class="btn" onclick="showDoctors('neurologist')">Невролог</button>
-            <button class="btn" onclick="showDoctors('cardiologist')">Кардиолог</button>
+            <h3 class="section-title">Get Tested</h3>
+            <p>Book doctors and diagnostics instantly via <strong>Telegram</strong></p>
+            <button class="btn btn-secondary" onclick="openTelegram()">
+                Open in Telegram
+            </button>
         </div>
     </div>
 
     <script>
-        function analyzeSymptoms() {
-            const text = document.querySelector('.symptoms-input').value;
-            if(text.trim() === '') {
-                alert('Пожалуйста, опишите симптомы');
-                return;
-            }
-
-            // Здесь будет вызов Telegram Bot API для анализа симптомов
-            Telegram.WebApp.sendData(JSON.stringify({
-                action: 'analyze_symptoms',
-                text: text
-            }));
-        }
-
         function showDoctors(specialization) {
-            // Открываем список врачей выбранной специализации
             Telegram.WebApp.sendData(JSON.stringify({
                 action: 'show_doctors',
                 specialization: specialization
             }));
         }
 
+        function openTelegram() {
+            Telegram.WebApp.close();
+            window.location.href = "https://t.me/your_bot_username";
+        }
+
         // Инициализация WebApp
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
+
+        // Меняем цвет фона WebApp
+        Telegram.WebApp.setHeaderColor('#5181b8');
+        Telegram.WebApp.setBackgroundColor('#f5f7fa');
     </script>
 </body>
 </html>
