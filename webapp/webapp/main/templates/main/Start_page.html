@@ -205,7 +205,7 @@
         </div>
 
         <div class="card">
-            <button class="btn btn-primary" onclick="showDoctors('general')">
+            <button class="btn btn-primary" onclick="goToMainPage()">
                 See a Doctor →
             </button>
         </div>
@@ -232,6 +232,10 @@
                 action: 'show_doctors',
                 specialization: specialization
             }));
+        }
+
+        function goToMainPage() {
+            window.location.href = "Main_page.html"; // если ты хостишь файл локально или на сервере
         }
 
         function openTelegram() {

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Med App - Select a Doctor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .topbar {
+            background-color: white;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            color: #2c5282;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -260px;
+            width: 250px;
+            height: 100%;
+            background-color: white;
+            padding-top: 60px;
+            transition: right 0.3s ease;
+            z-index: 1500;
+        }
+
+        .sidebar-header {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #2c5282;
+            cursor: pointer;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 25px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-menu li a {
+            color: #2c5282;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .sidebar-menu li a:hover {
+            color: #1a365d;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2c5282;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e0;
+            border-radius: 10px;
+            background-color: white;
+            font-size: 16px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #2c5282;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #1a365d;
+        }
+
+        .doctor-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+        }
+
+        .doctor-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: #e2e8f0;
+        }
+
+        .doctor-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #2d3748;
+        }
+
+        .doctor-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .doctor-info .rating {
+            color: #f6ad55;
+            font-size: 14px;
+        }
+
+        .doctor-info .price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header" onclick="toggleSidebar()">✕</div>
+        <ul class="sidebar-menu">
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#" onclick="Telegram.WebApp.close()">Exit</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Select a Doctor</h1>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search">
+
+        <div class="filter-buttons">
+            <button class="filter-btn">Cardiologist</button>
+            <button class="filter-btn">Dermatologist</button>
+            <button class="filter-btn">Neurologist</button>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image"></div>
+            <div class="doctor-info">
+                <h3>Samuel Rhodes</h3>
+                <p>Cardiologist</p>
+                <p class="rating">★ 4.50 (200 reviews)</p>
+                <p class="price">Price: $139.06</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image"></div>
+            <div class="doctor-info">
+                <h3>Christopher Cross</h3>
+                <p>Otolaryngologist</p>
+                <p class="rating">★ 4.39 (185 reviews)</p>
+                <p class="price">Price: $121.73</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image"></div>
+            <div class="doctor-info">
+                <h3>Ronald Kelly</h3>
+                <p>Neurologist</p>
+                <p class="rating">★ 4.46 (140 reviews)</p>
+                <p class="price">Price: $51.00</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image"></div>
+            <div class="doctor-info">
+                <h3>Jeffrey Estrada</h3>
+                <p>Otolaryngologist</p>
+                <p class="rating">★ 4.42 (120 reviews)</p>
+                <p class="price">Price: $115.20</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.right = sidebar.style.right === '0px' ? '-260px' : '0px';
+        }
+
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+        Telegram.WebApp.setHeaderColor('#1a365d');
+        Telegram.WebApp.setBackgroundColor('#f8f9fa');
+    </script>
+</body>
+</html>
