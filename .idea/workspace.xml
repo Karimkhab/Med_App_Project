@@ -5,8 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ed11260-9c8a-446b-8d2f-bf4bcb1c6665" name="Changes" comment="New bot commit">
+      <change afterPath="$PROJECT_DIR$/Web App/img/titov.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Web App/img/valeev.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Web App/img/vasiliev.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/Telegram Bot Dir/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/Web App/Main_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Med_App_Telegram_Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Telegram Bot Dir/Med_App_Telegram_Bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project_Picture.png" beforeDir="false" afterPath="$PROJECT_DIR$/Web App/img/Project_Picture.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/background.py" beforeDir="false" afterPath="$PROJECT_DIR$/Telegram Bot Dir/background.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Web App/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +66,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JavaScript Debug.Main_page.html.executor": "Run",
+    "JavaScript Debug.Start_page.html.executor": "Run",
     "JavaScript Debug.index.html.executor": "Run",
     "Python.Med_App_Telegram_Bot.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -73,7 +83,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/../Med_App_Project_Picture" />
+      <recent name="$PROJECT_DIR$/Web App/img" />
+      <recent name="$PROJECT_DIR$/Web App" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/webapp/webapp/main" />
+      <recent name="$PROJECT_DIR$/webapp/main/templates/main" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -101,7 +115,8 @@
       <workItem from="1749121227389" duration="10499000" />
       <workItem from="1749139889968" duration="820000" />
       <workItem from="1749160051892" duration="3853000" />
-      <workItem from="1749203504998" duration="25144000" />
+      <workItem from="1749203504998" duration="32718000" />
+      <workItem from="1749723599292" duration="3132000" />
     </task>
     <task id="LOCAL-00001" summary="Первый коммит">
       <option name="closed" value="true" />
@@ -303,7 +318,55 @@
       <option name="project" value="LOCAL" />
       <updated>1749409369798</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749411094031</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1749411094031</updated>
+    </task>
+    <task id="LOCAL-00027" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749463006631</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1749463006631</updated>
+    </task>
+    <task id="LOCAL-00028" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749463498715</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1749463498715</updated>
+    </task>
+    <task id="LOCAL-00029" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749724517096</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1749724517096</updated>
+    </task>
+    <task id="LOCAL-00030" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749724657989</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1749724657989</updated>
+    </task>
+    <task id="LOCAL-00031" summary="New bot commit">
+      <option name="closed" value="true" />
+      <created>1749724848475</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1749724848475</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
