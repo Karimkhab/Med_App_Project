@@ -411,9 +411,11 @@
         } else {
             // Не в Telegram - показываем ошибку
             authLoading.style.display = 'none';
-            authError.style.display =
-
-    <script>
+            authError.style.display = 'flex';
+            authError.querySelector('p').textContent = 'Please open via Telegram app';
+        }
+    });
+</script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.style.right = sidebar.style.right === '0px' ? '-260px' : '0px';
