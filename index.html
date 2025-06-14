@@ -360,33 +360,29 @@
             const userAvatar = document.getElementById('userAvatar');
 
             // Проверяем, что это Telegram WebApp
-            if (window.Telegram && window.Telegram.WebApp) {
+            const isTelegram = window.Telegram && window.Telegram.WebApp;
+
+            if (isTelegram) {
                 const tg = window.Telegram.WebApp;
-                tg.expand(); // Раскрываем на весь экран
+                tg.expand();
 
                 try {
-                    // Проверяем данные пользователя
-                    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                    if (tg.initDataUnsafe?.user) {
                         const user = tg.initDataUnsafe.user;
 
-                        // Успешная авторизация
+                        // Telegram User
                         authLoading.style.display = 'none';
                         authSuccess.style.display = 'flex';
                         userName.textContent = user.first_name || 'Telegram User';
-
-                        if (user.photo_url) {
-                            userAvatar.src = user.photo_url;
-                        }
-
-                        // Добавляем класс для стилизации успешной авторизации
+                        userAvatar.src = user.photo_url || 'img/default_avatar.png';
                         authStatusCard.classList.add('authorized');
 
-                        // Инициализируем WebApp
                         Telegram.WebApp.ready();
                         Telegram.WebApp.expand();
                         Telegram.WebApp.setHeaderColor('#1a365d');
                         Telegram.WebApp.setBackgroundColor('#f8f9fa');
                     } else {
+                        // Telegram, но нет данных пользователя
                         throw new Error("User data not available");
                     }
                 } catch (error) {
@@ -397,15 +393,16 @@
                     authError.querySelector('p').textContent = 'Please authorize in Telegram';
                 }
             } else {
-                // Не в Telegram - показываем адаптированное сообщение
+                // Режим обычного браузера
                 authLoading.style.display = 'none';
                 authSuccess.style.display = 'flex';
                 userName.textContent = 'Guest User';
-                userAvatar.src = '/Web%20App/img/default_avatar.png';
+                userAvatar.src = 'img/default_avatar.png'; // Убедитесь в правильности пути
                 document.querySelector('.user-info p').textContent = 'Using web version';
 
-                // Скрываем кнопки, которые требуют Telegram
-                document.querySelector('.btn-secondary').style.display = 'none';
+                // Скрываем Telegram-специфичные элементы
+                const tgElements = document.querySelectorAll('.btn-secondary, .telegram-text');
+                tgElements.forEach(el => el.style.display = 'none');
             }
         });
 
