@@ -178,6 +178,112 @@
         .sidebar-menu li a:hover {
             color: #1a365d;
         }
+
+        /* Auth Status Card */
+        .auth-status-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .auth-loading, .auth-success, .auth-error {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5282;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .user-avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2c5282;
+        }
+
+        .user-info h3 {
+            margin: 0;
+            color: #2c5282;
+            font-size: 18px;
+        }
+
+        .user-info p {
+            margin: 5px 0 0;
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        .error-icon {
+            font-size: 24px;
+            color: #e53e3e;
+        }
+
+        .error-info h3 {
+            margin: 0;
+            color: #e53e3e;
+            font-size: 18px;
+        }
+
+        .error-info p {
+            margin: 5px 0 0;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-success, .auth-error {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Состояния карточки */
+        .auth-status-card.authorized {
+            border-left: 4px solid #38a169;
+        }
+
+        .auth-status-card.error {
+            border-left: 4px solid #e53e3e;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .auth-status-card {
+                padding: 15px;
+            }
+
+            .user-avatar img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-info h3 {
+                font-size: 16px;
+            }
+
+            .user-info p {
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -204,6 +310,30 @@
             <p>Your well-being is our priority</p>
         </div>
 
+        <!-- Добавьте этот блок после .header и перед первой карточкой -->
+        <div class="auth-status-card" id="authStatusCard">
+            <div class="auth-loading" id="authLoading">
+                <div class="loader"></div>
+                <span>Checking authorization...</span>
+            </div>
+            <div class="auth-success" id="authSuccess" style="display: none;">
+                <div class="user-avatar">
+                    <img id="userAvatar" src="/Web%20App/img/default_avatar.png" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">Welcome!</h3>
+                    <p id="userStatus">Successfully authorized via Telegram</p>
+                </div>
+            </div>
+            <div class="auth-error" id="authError" style="display: none;">
+                <div class="error-icon">⚠️</div>
+                <div class="error-info">
+                    <h3>Authorization required</h3>
+                    <p>Please open this page via Telegram to continue</p>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <button class="btn btn-primary" onclick="goToMainPage()">
                 See a Doctor →
@@ -221,45 +351,97 @@
         </div>
     </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <script>
-            const tg = window.Telegram.WebApp;
-            const user = tg.initDataUnsafe.user;
+    <script>
+        const tg = window.Telegram.WebApp;
+        const user = tg.initDataUnsafe.user;
+        const authStatusCard = document.getElementById('authStatusCard');
+        const authLoading = document.getElementById('authLoading');
+        const authSuccess = document.getElementById('authSuccess');
+        const authError = document.getElementById('authError');
+        const userName = document.getElementById('userName');
+        const userAvatar = document.getElementById('userAvatar');
 
-            const payload = {
-                id: user?.id,
-                first_name: user?.first_name,
-                last_name: user?.last_name,
-                username: user?.username,
-                hash: tg.initData  // это строка для проверки подлинности
-            };
+        // Проверяем, открыто ли в Telegram WebApp
+        if (tg.platform !== 'unknown') {
+            if (user) {
+                const payload = {
+                    id: user.id,
+                    first_name: user.first_name || '',
+                    last_name: user.last_name || '',
+                    username: user.username || '',
+                    photo_url: user.photo_url || '',
+                    hash: tg.initData
+                };
 
-            fetch("/auth/telegram/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie('csrftoken')  // Django защита
-                },
-                body: JSON.stringify(payload)
-            }).then(res => res.json()).then(data => {
-                console.log("Auth response:", data);
-            });
+                fetch("/auth/telegram/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Скрываем индикатор загрузки
+                    authLoading.style.display = 'none';
 
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
+                    if (data.status === "success") {
+                        // Показываем успешную авторизацию
+                        authSuccess.style.display = 'flex';
+
+                        // Устанавливаем данные пользователя
+                        const name = [user.first_name, user.last_name].filter(Boolean).join(' ');
+                        userName.textContent = name || 'Telegram User';
+
+                        // Устанавливаем аватар, если есть
+                        if (user.photo_url) {
+                            userAvatar.src = user.photo_url;
                         }
+
+                        // Добавляем класс для стилизации
+                        authStatusCard.classList.add('authorized');
+                    } else {
+                        // Показываем ошибку
+                        authError.style.display = 'flex';
+                        authStatusCard.classList.add('error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Auth error:", error);
+                    authLoading.style.display = 'none';
+                    authError.style.display = 'flex';
+                    authStatusCard.classList.add('error');
+                });
+            } else {
+                // Нет данных пользователя
+                authLoading.style.display = 'none';
+                authError.style.display = 'flex';
+                authStatusCard.classList.add('error');
+            }
+        } else {
+            // Не в Telegram WebApp
+            authLoading.style.display = 'none';
+            authError.querySelector('p').textContent = 'Please open in Telegram to authorize';
+            authError.style.display = 'flex';
+            authStatusCard.classList.add('error');
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
                 }
-                return cookieValue;
             }
-        </script>
+            return cookieValue;
+        }
+    </script>
 
     <script>
         function toggleSidebar() {
