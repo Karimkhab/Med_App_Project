@@ -351,9 +351,8 @@
         </div>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        const user = tg.initDataUnsafe.user;
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
         const authStatusCard = document.getElementById('authStatusCard');
         const authLoading = document.getElementById('authLoading');
         const authSuccess = document.getElementById('authSuccess');
@@ -361,87 +360,58 @@
         const userName = document.getElementById('userName');
         const userAvatar = document.getElementById('userAvatar');
 
-        // Проверяем, открыто ли в Telegram WebApp
-        if (tg.platform !== 'unknown') {
-            if (user) {
-                const payload = {
-                    id: user.id,
-                    first_name: user.first_name || '',
-                    last_name: user.last_name || '',
-                    username: user.username || '',
-                    photo_url: user.photo_url || '',
-                    hash: tg.initData
-                };
+        // Проверяем, что это Telegram WebApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.expand(); // Раскрываем на весь экран
 
-                fetch("/auth/telegram/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": getCookie('csrftoken')
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Скрываем индикатор загрузки
+            try {
+                // Проверяем данные пользователя
+                if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                    const user = tg.initDataUnsafe.user;
+
+                    // Формируем payload для Django
+                    const payload = {
+                        id: user.id,
+                        first_name: user.first_name || '',
+                        last_name: user.last_name || '',
+                        username: user.username || '',
+                        photo_url: user.photo_url || '',
+                        hash: tg.initData
+                    };
+
+                    // Отправляем на бэкенд
+                    const response = await fetch("https://your-django-backend.com/auth/telegram/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    // Успешная авторизация
                     authLoading.style.display = 'none';
+                    authSuccess.style.display = 'flex';
+                    userName.textContent = user.first_name || 'Telegram User';
 
-                    if (data.status === "success") {
-                        // Показываем успешную авторизацию
-                        authSuccess.style.display = 'flex';
-
-                        // Устанавливаем данные пользователя
-                        const name = [user.first_name, user.last_name].filter(Boolean).join(' ');
-                        userName.textContent = name || 'Telegram User';
-
-                        // Устанавливаем аватар, если есть
-                        if (user.photo_url) {
-                            userAvatar.src = user.photo_url;
-                        }
-
-                        // Добавляем класс для стилизации
-                        authStatusCard.classList.add('authorized');
-                    } else {
-                        // Показываем ошибку
-                        authError.style.display = 'flex';
-                        authStatusCard.classList.add('error');
+                    if (user.photo_url) {
+                        userAvatar.src = user.photo_url;
                     }
-                })
-                .catch(error => {
-                    console.error("Auth error:", error);
-                    authLoading.style.display = 'none';
-                    authError.style.display = 'flex';
-                    authStatusCard.classList.add('error');
-                });
-            } else {
-                // Нет данных пользователя
+
+                } else {
+                    throw new Error("User data not available");
+                }
+            } catch (error) {
+                console.error("Auth error:", error);
                 authLoading.style.display = 'none';
                 authError.style.display = 'flex';
-                authStatusCard.classList.add('error');
             }
         } else {
-            // Не в Telegram WebApp
+            // Не в Telegram - показываем ошибку
             authLoading.style.display = 'none';
-            authError.querySelector('p').textContent = 'Please open in Telegram to authorize';
-            authError.style.display = 'flex';
-            authStatusCard.classList.add('error');
-        }
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    </script>
+            authError.style.display =
 
     <script>
         function toggleSidebar() {

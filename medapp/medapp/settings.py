@@ -20,7 +20,13 @@ TELEGRAM_LOGIN_REDIRECT_URL = 'https://core.telegram.org/widgets/login'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Настройки CORS
+CORS_ALLOWED_ORIGINS = [
+    "https://med-app-project-alpha.vercel.app",
+    "https://core.telegram.org/widgets/login"
+]
 
+CORS_ALLOW_CREDENTIALS = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
