@@ -1,0 +1,45 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Med App</title>
+  ... CSS и meta ...
+</head>
+<body>
+  <div class="topbar">
+    <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+  </div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header" onclick="toggleSidebar()">✕</div>
+    <ul class="sidebar-menu">
+      {% if request.user.is_authenticated %}
+        <li><a href="#">Profile</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <div class="container">
+    {% if not request.user.is_authenticated %}
+      {% load telegram_login %}
+      <div class="telegram-login">
+        {{ get_telegram_login_button(
+            bot_name=TELEGRAM_BOT_NAME,
+            redirect_url=TELEGRAM_LOGIN_REDIRECT_URL,
+            size='medium',
+            user_photo=True )|safe }}
+      </div>
+    {% endif %}
+
+    {% block content %}
+    <!-- Контент каждой страницы сюда -->
+    {% endblock %}
+  </div>
+
+  <script>
+    function toggleSidebar() { ... }
+  </script>
+</body>
+</html>
