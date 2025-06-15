@@ -31,6 +31,17 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -39,6 +50,22 @@
     &quot;assignee&quot;: &quot;Karimkhab&quot;
   }
 }</component>
+  <component name="GitLabMergeRequestFiltersHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPENED",
+    "assignee": {
+      "type": "org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue",
+      "username": "k.khabibrakhmanov",
+      "fullname": "Karim Кhabibraкhmanov"
+    }
+  }
+}]]></component>
+  <component name="GitLabMergeRequestsSettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "first": "https://gitlab.pg.innopolis.university/team-47/med-app-tele-medicine.git",
+    "second": "3ed4a71c-8c39-440f-8f0f-d5b63c6deb5f"
+  }
+}]]></component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Karimkhab/Med_App_Project.git&quot;,
@@ -60,25 +87,26 @@
     "JavaScript Debug.Main_page.html.executor": "Run",
     "JavaScript Debug.Start_page.html.executor": "Run",
     "JavaScript Debug.index.html.executor": "Run",
+    "JavaScript Debug.main.html.executor": "Run",
     "Python.Med_App_Telegram_Bot.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "new__branch",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "File.Encoding",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/Web App/img" />
+      <recent name="$PROJECT_DIR$/Frontend Med App/templates" />
+      <recent name="$PROJECT_DIR$/Frontend Med App/static" />
+      <recent name="$PROJECT_DIR$/Frontend Med App" />
+      <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/Web App" />
-      <recent name="$PROJECT_DIR$/webapp/webapp/main" />
-      <recent name="$PROJECT_DIR$/webapp/main/templates/main" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -107,7 +135,7 @@
       <workItem from="1749139889968" duration="820000" />
       <workItem from="1749160051892" duration="3853000" />
       <workItem from="1749203504998" duration="32718000" />
-      <workItem from="1749723599292" duration="5050000" />
+      <workItem from="1749723599292" duration="22144000" />
     </task>
     <task id="LOCAL-00001" summary="Первый коммит">
       <option name="closed" value="true" />
@@ -397,11 +425,102 @@
       <option name="project" value="LOCAL" />
       <updated>1749727882109</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749919878253</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1749919878253</updated>
+    </task>
+    <task id="LOCAL-00038" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749920109321</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1749920109321</updated>
+    </task>
+    <task id="LOCAL-00039" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749920735242</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1749920735242</updated>
+    </task>
+    <task id="LOCAL-00040" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749921041101</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1749921041101</updated>
+    </task>
+    <task id="LOCAL-00041" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749921328430</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1749921328430</updated>
+    </task>
+    <task id="LOCAL-00042" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749921436751</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1749921436751</updated>
+    </task>
+    <task id="LOCAL-00043" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749921593647</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1749921593647</updated>
+    </task>
+    <task id="LOCAL-00044" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749921886063</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1749921886063</updated>
+    </task>
+    <task id="LOCAL-00045" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749996448554</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1749996448554</updated>
+    </task>
+    <task id="LOCAL-00046" summary="New commit">
+      <option name="closed" value="true" />
+      <created>1749997878782</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1749997878782</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Первый коммит" />
