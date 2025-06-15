@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Med App - Select a Doctor</title>
+
+    <link rel="stylesheet" href="/Frontend Med App/static/style.css">
+
+</head>
+<body>
+    <div class="topbar">
+        <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header" onclick="toggleSidebar()">✕</div>
+        <ul class="sidebar-menu">
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#" onclick="Telegram.WebApp.close()">Exit</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Select a Doctor</h1>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search">
+
+        <div class="filter-buttons">
+            <button class="filter-btn">Cardiologist</button>
+            <button class="filter-btn">Dermatologist</button>
+            <button class="filter-btn">Neurologist</button>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image khabibrakhmanov"></div>
+            <div class="doctor-info">
+                <h3>Karim Khabibrakhmanov</h3>
+                <p>Cardiologist</p>
+                <p class="rating">★ 4.50 (200 reviews)</p>
+                <p class="price">Price: $139.06</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image vasiliev"></div>
+            <div class="doctor-info">
+                <h3>Dmitrii Vasiliev</h3>
+                <p>Otolaryngologist</p>
+                <p class="rating">★ 4.39 (185 reviews)</p>
+                <p class="price">Price: $121.73</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image titov"></div>
+            <div class="doctor-info">
+                <h3>Roman Titov</h3>
+                <p>Neurologist</p>
+                <p class="rating">★ 4.46 (140 reviews)</p>
+                <p class="price">Price: $51.00</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image valeev"></div>
+            <div class="doctor-info">
+                <h3>Amir Valeev</h3>
+                <p>Otolaryngologist</p>
+                <p class="rating">★ 4.42 (120 reviews)</p>
+                <p class="price">Price: $115.20</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image khisamutdinova"></div>
+            <div class="doctor-info">
+                <h3>Alina Khisamutdinova</h3>
+                <p>Otolaryngologist</p>
+                <p class="rating">★ 4.42 (120 reviews)</p>
+                <p class="price">Price: $115.20</p>
+            </div>
+        </div>
+
+        <div class="doctor-card">
+            <div class="doctor-image krasova"></div>
+            <div class="doctor-info">
+                <h3>Elizaveta Krasova</h3>
+                <p>Otolaryngologist</p>
+                <p class="rating">★ 4.42 (120 reviews)</p>
+                <p class="price">Price: $115.20</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.right = sidebar.style.right === '0px' ? '-260px' : '0px';
+        }
+
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+        Telegram.WebApp.setHeaderColor('#1a365d');
+        Telegram.WebApp.setBackgroundColor('#f8f9fa');
+    </script>
+</body>
+</html>

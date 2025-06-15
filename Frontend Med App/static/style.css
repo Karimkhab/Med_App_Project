@@ -1,0 +1,472 @@
+:root {
+  --primary: #0088cc;
+  --secondary: #f1f1f1;
+  --text-color: #333;
+  --bg-light: #ffffff;
+  --border-radius: 12px;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+body {
+    font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Белая полоска сверху */
+.topbar {
+    background-color: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* вот это добавлено */
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 1000;
+}
+
+.menu-toggle {
+    font-size: 24px;
+    cursor: pointer;
+    color: #2c5282;
+}
+
+.container {
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #1a365d;
+}
+
+.header h1 {
+    color: #1a365d;
+    font-size: 48px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.header p {
+    color: #4a5568;
+    font-size: 18px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: none;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #2c5282;
+}
+
+.btn-primary:hover {
+    background-color: #1a365d;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: #2d3748;
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e0;
+}
+
+.divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 25px 0;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #2c5282;
+}
+
+.telegram-text {
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+strong {
+    color: #2c5282;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -260px; /* вместо left: -260px */
+    width: 250px;
+    height: 100%;
+    background-color: white;
+    padding-top: 60px;
+    transition: right 0.3s ease; /* сменить transition с left на right */
+    z-index: 1500;
+}
+
+.sidebar-header {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #2c5282;
+    cursor: pointer;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    padding: 15px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu li a {
+    color: #2c5282;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+.sidebar-menu li a:hover {
+    color: #1a365d;
+}
+
+/* Auth Status Card */
+.auth-status-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.auth-loading, .auth-success, .auth-error {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #2c5282;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.user-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2c5282;
+}
+
+.user-info h3 {
+    margin: 0;
+    color: #2c5282;
+    font-size: 18px;
+}
+
+.user-info p {
+    margin: 5px 0 0;
+    color: #4a5568;
+    font-size: 14px;
+}
+
+.error-icon {
+    font-size: 24px;
+    color: #e53e3e;
+}
+
+.error-info h3 {
+    margin: 0;
+    color: #e53e3e;
+    font-size: 18px;
+}
+
+.error-info p {
+    margin: 5px 0 0;
+    color: #718096;
+    font-size: 14px;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-success, .auth-error {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Состояния карточки */
+.auth-status-card.authorized {
+    border-left: 4px solid #38a169;
+}
+
+.auth-status-card.error {
+    border-left: 4px solid #e53e3e;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .auth-status-card {
+        padding: 15px;
+    }
+
+    .user-avatar img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-info h3 {
+        font-size: 16px;
+    }
+
+    .user-info p {
+        font-size: 13px;
+    }
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #2d3748;
+    line-height: 1.6;
+}
+
+.topbar {
+    background-color: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 1000;
+}
+
+.menu-toggle {
+    font-size: 24px;
+    cursor: pointer;
+    color: #2c5282;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -260px;
+    width: 250px;
+    height: 100%;
+    background-color: white;
+    padding-top: 60px;
+    transition: right 0.3s ease;
+    z-index: 1500;
+}
+
+.sidebar-header {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #2c5282;
+    cursor: pointer;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    padding: 15px 25px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sidebar-menu li a {
+    color: #2c5282;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+}
+
+.sidebar-menu li a:hover {
+    color: #1a365d;
+}
+
+.container {
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #2c5282;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #cbd5e0;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 16px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #2c5282;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: #1a365d;
+}
+
+.doctor-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+}
+
+.doctor-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 15px;
+    background-color: #e2e8f0;
+}
+
+.doctor-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #2d3748;
+}
+
+.doctor-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #718096;
+}
+
+.doctor-info .rating {
+    color: #f6ad55;
+    font-size: 14px;
+}
+
+.doctor-info .price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.doctor-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+.doctor-image.khabibrakhmanov {
+    background-image: url("/Frontend Med App/static/img/khabibrakhmanov.jpeg");
+}
+.doctor-image.vasiliev {
+    background-image: url("/Frontend Med App/static/img/vasiliev.jpeg");
+}
+.doctor-image.titov {
+    background-image: url("/Frontend Med App/static/img/titov.jpg");
+}
+.doctor-image.valeev {
+    background-image: url("/Frontend Med App/static/img/valeev.jpeg");
+}
+.doctor-image.khisamutdinova {
+    background-image: url("/Frontend Med App/static/img/khisamutdinova.jpeg");
+}
+.doctor-image.krasova {
+    background-image: url("/Frontend Med App/static/img/krasova.jpeg");
+}

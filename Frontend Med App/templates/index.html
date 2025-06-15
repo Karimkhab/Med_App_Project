@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Med App - Medical Assistant</title>
+    <link rel="stylesheet" href="/Frontend Med App/static/style.css">
+</head>
+<body>
+    <!-- Верхняя белая полоса с гамбургером -->
+    <div class="topbar">
+        <div class="menu-toggle" onclick="toggleSidebar()">&#9776;</div>
+    </div>
+
+    <!-- Боковая панель -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header" onclick="toggleSidebar()">✕</div>
+        <ul class="sidebar-menu">
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#" onclick="Telegram.WebApp.close()">Exit</a></li>
+        </ul>
+    </div>
+
+    <!-- Основное содержимое -->
+    <div class="container">
+        <div class="header">
+            <img src="/Frontend Med App/static/img/Project_Picture.png" alt="Med App Logo" class="logo">
+            <h1>MED APP</h1>
+            <p>Your well-being is our priority</p>
+        </div>
+
+        <!-- Добавьте этот блок после .header и перед первой карточкой -->
+        <div class="auth-status-card" id="authStatusCard">
+            <div class="auth-loading" id="authLoading">
+                <div class="loader"></div>
+                <span>Checking authorization...</span>
+            </div>
+            <div class="auth-success" id="authSuccess" style="display: none;">
+                <div class="user-avatar">
+                    <img id="userAvatar" src="/Frontend Med App/static/img/Project_Picture.png" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">Welcome!</h3>
+                    <p id="userStatus">Successfully authorized via Telegram</p>
+                </div>
+            </div>
+            <div class="auth-error" id="authError" style="display: none;">
+                <div class="error-icon">⚠️</div>
+                <div class="error-info">
+                    <h3>Authorization required</h3>
+                    <p>Please open this page via Telegram to continue</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <button class="btn btn-primary" onclick="goToMainPage()">
+                See a Doctor →
+            </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card">
+            <h3 class="section-title">Get Tested</h3>
+            <p class="telegram-text">Book doctors and diagnostics instantly via <strong>Telegram</strong></p>
+            <button class="btn btn-secondary" onclick="openTelegram()">
+                Open in Telegram
+            </button>
+        </div>
+    </div>
+<script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const authStatusCard = document.getElementById('authStatusCard');
+            const authLoading = document.getElementById('authLoading');
+            const authSuccess = document.getElementById('authSuccess');
+            const authError = document.getElementById('authError');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+
+            // Проверяем, что это Telegram WebApp
+            const isTelegram = window.Telegram && window.Telegram.WebApp;
+
+            if (isTelegram) {
+                const tg = window.Telegram.WebApp;
+                tg.expand();
+
+                try {
+                    if (tg.initDataUnsafe?.user) {
+                        const user = tg.initDataUnsafe.user;
+
+                        // Telegram User
+                        authLoading.style.display = 'none';
+                        authSuccess.style.display = 'flex';
+                        userName.textContent = user.first_name || 'Telegram User';
+                        userAvatar.src = user.photo_url || '/Frontend Med App/static/img/Project_Picture.png';
+                        authStatusCard.classList.add('authorized');
+
+                        Telegram.WebApp.ready();
+                        Telegram.WebApp.expand();
+                        Telegram.WebApp.setHeaderColor('#1a365d');
+                        Telegram.WebApp.setBackgroundColor('#f8f9fa');
+                    } else {
+                        // Telegram, но нет данных пользователя
+                        throw new Error("User data not available");
+                    }
+                } catch (error) {
+                    console.error("Auth error:", error);
+                    authLoading.style.display = 'none';
+                    authError.style.display = 'flex';
+                    authStatusCard.classList.add('error');
+                    authError.querySelector('p').textContent = 'Please authorize in Telegram';
+                }
+            } else {
+                // Режим обычного браузера
+                authLoading.style.display = 'none';
+                authSuccess.style.display = 'flex';
+                userName.textContent = 'Guest User';
+                userAvatar.src = '/Frontend Med App/static/img/Project_Picture.png'; // Убедитесь в правильности пути
+                document.querySelector('.user-info p').textContent = 'Using web version';
+
+                // Скрываем Telegram-специфичные элементы
+                const tgElements = document.querySelectorAll('.btn-secondary, .telegram-text');
+                tgElements.forEach(el => el.style.display = 'none');
+            }
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.right = sidebar.style.right === '0px' ? '-260px' : '0px';
+        }
+
+        function showDoctors(specialization) {
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: 'show_doctors',
+                    specialization: specialization
+                }));
+            } else {
+                alert('This feature is only available in Telegram app');
+            }
+        }
+
+        function goToMainPage() {
+            window.location.href = "/Frontend Med App/templates/main.html";
+        }
+
+        function openTelegram() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.close();
+            } else {
+                window.location.href = "https://t.me/med_app_tg_bot"; // Убедитесь, что убрали @ из ссылки
+            }
+        }
+    </script>
+</body>
+</html>
